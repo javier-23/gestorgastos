@@ -6,10 +6,10 @@ Aplicación web para gestionar los gastos personales, con gráficos y personaliz
 - Crear, editar y borrar categorías
 - Registrar gastos: 
     - Cantidad, concepto, fecha, categoría, gasto recurrente
-- Filtrar gastos por fecha y categoría
+- Listado con filtros de gastos por fecha, concepto y categoría
 - Definir presupuesto mensual con aviso al superarlo
 - Resumen mensual con gráficas
-    - Cuadros con total mensual
+    - Cuadros con gasto mensual, presupuesto/ingresos, ahorro.
     - Dashboard con distribución y evolución de gastos
 
 ## Tech Stack
@@ -17,3 +17,11 @@ Aplicación web para gestionar los gastos personales, con gráficos y personaliz
 **Client:** React, TailwindCSS
 
 **Server:** Node, Express
+
+## Commands
+
+### Docker
+docker compose up -d        # encender la BD
+docker compose down         # apagarla (los datos se guardan)
+docker compose logs db      # ver qué pasa si algo falla
+docker compose down -v      # apagar y BORRAR todos los datos

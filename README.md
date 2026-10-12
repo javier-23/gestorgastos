@@ -25,3 +25,4 @@ docker compose up -d        # encender la BD
 docker compose down         # apagarla (los datos se guardan)
 docker compose logs db      # ver qué pasa si algo falla
 docker compose down -v      # apagar y BORRAR todos los datos
+docker compose exec db psql -U gastos_user -d gastos_db  # conectarme a la BD

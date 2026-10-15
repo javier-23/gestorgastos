@@ -1,0 +1,25 @@
+meta {
+  name: DELETECategoria
+  type: http
+  seq: 4
+}
+
+delete {
+  url: http://localhost:1234/categories/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Comida",
+    "color": "#FF5734",
+    "icon": "utensils",
+    "type": "expense"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,25 @@
+meta {
+  name: CrearCategoria
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:1234/categories
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Comida",
+    "color": "#FF5733",
+    "icon": "utensils",
+    "type": "expense"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

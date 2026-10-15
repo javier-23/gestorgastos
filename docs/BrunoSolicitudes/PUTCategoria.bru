@@ -1,0 +1,25 @@
+meta {
+  name: PUTCategoria
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:1234/categories/999
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Comida",
+    "color": "#FF5734",
+    "icon": "utensils",
+    "type": "expense"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

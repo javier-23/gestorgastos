@@ -1,6 +1,7 @@
 // Para CRUD categorías
 import { Router } from 'express'
 import { pool } from '../db.js'
+import { categorySchema, idSchema } from '../schemas/category.js'
 
 const router = Router() // Crear un router (mini aplicación) para manejar las rutas
 const TEST_USER='test'
@@ -19,11 +20,14 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const { name,color,icon,type } = req.body
-
-    if(!name || !color){
-        return res.status(400).json({ error: 'Faltan campos obligatorios' })
-    }
+  const parsed = categorySchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({
+      // Mapeamos los errores de validación para que sean más legibles
+      error: parsed.error.issues.map(i => `${i.path.join('.')}: ${i.message}`)
+    })
+  }
+  const { name, color, icon, type } = parsed.data
 
     try {
         const { rows } = await pool.query(
@@ -42,8 +46,19 @@ router.post('/', async (req, res) => {
 
 // Actualizar con id categoría y id usuario (para que no pueda actualizar categorías de otros usuarios)
 router.put('/:id', async (req, res) => {
-    const { id } = req.params
-    const { name, color, icon, type } = req.body
+  // Validad id
+  const parsedId = idSchema.safeParse(req.params.id)
+  if (!parsedId.success) {
+    return res.status(400).json({ error: 'id inválido' })
+  }
+  const { id } = parsedId.data
+
+  // Validar body
+  const parsedBody = categorySchema.safeParse(req.body)
+  if (!parsedBody.success) {
+    return res.status(400).json({ error: 'Datos inválidos' })
+  }
+  const { name, color, icon, type } = parsedBody.data
 
     try{
       const { rows } = await pool.query(
@@ -65,7 +80,12 @@ router.put('/:id', async (req, res) => {
 
 // Eliminar con id categoría y id usuario (para que no pueda eliminar categorías de otros usuarios)
 router.delete('/:id', async (req, res) => {
-    const { id } = req.params
+  // Validar id
+  const parsedId = idSchema.safeParse(req.params.id)
+  if (!parsedId.success) {
+    return res.status(400).json({ error: 'id inválido' })
+  }
+  const { id } = parsedId.data
 
     try {
         const { rowCount } = await pool.query(

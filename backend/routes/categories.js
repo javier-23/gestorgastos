@@ -27,12 +27,12 @@ router.post('/', async (req, res) => {
       error: parsed.error.issues.map(i => `${i.path.join('.')}: ${i.message}`)
     })
   }
-  const { name, color, icon, type } = parsed.data
+  const { name, color, icon} = parsed.data
 
     try {
         const { rows } = await pool.query(
-            'INSERT INTO category (name, color, icon, type, id_user) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [name, color, icon, type, TEST_USER]
+            'INSERT INTO category (name, color, icon, id_user) VALUES ($1, $2, $3, $4) RETURNING *',
+            [name, color, icon, TEST_USER]
         )
         res.status(201).json(rows[0])
     } catch (err) {
@@ -58,12 +58,12 @@ router.put('/:id', async (req, res) => {
   if (!parsedBody.success) {
     return res.status(400).json({ error: 'Datos inválidos' })
   }
-  const { name, color, icon, type } = parsedBody.data
+  const { name, color, icon} = parsedBody.data
 
     try{
       const { rows } = await pool.query(
-        'UPDATE category SET name = $1, color = $2, icon = $3, type = $4 WHERE id = $5 AND id_user = $6 RETURNING *',
-        [name, color, icon, type, id, TEST_USER]
+        'UPDATE category SET name = $1, color = $2, icon = $3 WHERE id = $4 AND id_user = $5 RETURNING *',
+        [name, color, icon, id, TEST_USER]
       )
       if (rows.length === 0) {
         return res.status(404).json({ error: 'Categoría no encontrada' })

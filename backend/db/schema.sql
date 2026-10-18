@@ -9,7 +9,6 @@ CREATE TABLE "category" (
   "name" varchar(100) NOT NULL,
   "color" varchar(7) NOT NULL,
   "icon" varchar,
-  "type" varchar,
   "id_user" varchar
 );
 
@@ -18,8 +17,12 @@ CREATE TABLE "expenses" (
   "date" date NOT NULL,
   "total" NUMERIC(10, 2) NOT NULL,
   "concept" varchar,
+  "frequency" varchar(10) NOT NULL DEFAULT 'once'
+    CHECK ("frequency" IN ('once', 'weekly', 'monthly', 'yearly')),
+  "end_date" date,
   "id_category" int,
-  "id_user" varchar
+  "id_user" varchar,
+  CHECK ("end_date" IS NULL OR "end_date" >= "date")
 );
 
 CREATE TABLE "budget" (

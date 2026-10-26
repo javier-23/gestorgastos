@@ -77,4 +77,59 @@ router.post('/', async (req, res) => {
     }
 })
 
+router.put('/:id', async (req, res) => {
+    const id = idSchema.safeParse(req.params.id)
+    if (!id.success) {
+        return res.status(400).json({ error: 'ID inválido' })
+    }
+
+    const result = expenseSchema.safeParse(req.body)
+    if (!result.success) {
+        return res.status(400).json({ error: result.error.errors })
+    }
+
+    const { date, total, concept, id_category, frequency, end_date } = result.data
+
+    try{
+        const { rows } = await pool.query(
+            `UPDATE expenses
+            SET date = $1, total = $2, concept = $3, id_category = $4, frequency = $5, end_date = $6
+            WHERE id = $7 AND id_user = $8
+                AND EXISTS (SELECT 1 FROM category WHERE id = $4 AND id_user = $8)
+            RETURNING *`,
+            [date, total, concept ?? null, id_category, frequency, end_date ?? null, id.data, TEST_USER]
+        )
+        if (rows.length === 0) {
+            return res.status(400).json({ error: 'El gasto no existe o la categoría no es válida' })
+        }
+        res.status(204).send()
+    } catch (err) {
+        console.error(err)
+        res.status(500).json({ error: 'Error interno' })
+    }
+})
+
+router.delete('/:id', async (req, res) => {
+    const id = idSchema.safeParse(req.params.id)
+    if (!id.success) {
+        return res.status(400).json({ error: 'ID inválido' })
+    }
+    
+    try{
+        const { rows } = await pool.query(
+            `DELETE FROM expenses
+            WHERE id = $1 AND id_user = $2
+            RETURNING *`,
+            [id.data, TEST_USER]
+        )
+        if (rows.length === 0) {
+            return res.status(400).json({ error: 'El gasto no existe o no pertenece al usuario' })
+        }
+        res.status(204).send()
+    } catch (err) {
+        console.error(err)
+        res.status(500).json({ error: 'Error interno' })
+    }
+})
+
 export default router

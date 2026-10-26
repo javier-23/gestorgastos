@@ -1,6 +1,7 @@
 import express from 'express'
 import { pool } from './db.js' // Importar la conexión a la base de datos
 import categoriesRouter from './routes/categories.js' // Importar el router de categorías
+import expensesRouter from './routes/expenses.js' // Importar el router de gastos
 
 const app = express()
 app.use(express.json())
@@ -17,6 +18,7 @@ app.get('/health', async (req, res) => {
 })
 
 app.use('/categories', categoriesRouter) // Usar el router de categorías para las rutas que comienzan con /categories
+app.use('/expenses', expensesRouter) // Usar el router de gastos para las rutas que comienzan con /expenses
 
 app.listen(PORT, () => {  
     console.log(`Servidor escuchando en http://localhost:${PORT}`)

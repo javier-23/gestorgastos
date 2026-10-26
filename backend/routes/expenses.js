@@ -59,12 +59,12 @@ router.post('/', async (req, res) => {
 
     try{
         const { rows } = await pool.query(
-            `INSERT INTO expenses (date, total, concept, id_category, id_user)
-            SELECT $1, $2, $3, c.id, $5, $6, $7
+            `INSERT INTO expenses (date, total, concept, frequency, end_date, id_category, id_user)
+            SELECT $1, $2, $3, $4, $5, $6, $7
             FROM category c
-            WHERE c.id = $4 AND c.id_user = $5
+            WHERE c.id = $6 AND c.id_user = $7
             RETURNING *`,
-            [date, total, concept ?? null, id_category, TEST_USER, frequency, end_date ?? null]
+            [date, total, concept ?? null,  frequency, end_date ?? null, id_category, TEST_USER]
         )
         if (rows.length === 0) {
             return res.status(400).json({ error: 'La categoría no existe o no pertenece al usuario' })

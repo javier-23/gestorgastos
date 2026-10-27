@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-ROUTER.get('/occurrences', async (req, res) => {
+router.get('/occurrences', async (req, res) => {
     const filters = occurrencesFiltersSchema.safeParse(req.query)
     if (!filters.success) {
         return res.status(400).json({ error: filters.error.errors })
@@ -58,6 +58,9 @@ ROUTER.get('/occurrences', async (req, res) => {
     const { from, to, category } = filters.data
 
     try {
+        // COALESCE: usa end_date si no es nulo, de lo contrario usa to
+        // LEAST: toma la fecha más temprana entre end_date y to
+        // generate_series(fechainicio,fechafin,intervalo)
         const { rows } = await pool.query(
             `SELECT e.id, e.date, e.total, e.concept, e.frequency, e.end_date,
                 c.id AS category_id, c.name AS category_name,
@@ -67,22 +70,22 @@ ROUTER.get('/occurrences', async (req, res) => {
             CROSS JOIN LATERAL (
                 SELECT d::date AS occurrence_date
                 FROM generate_series(
-                e.date::timestamp,
-                LEAST($3::date, COALESCE(e.end_date, $3::date))::timestamp,
-                CASE e.frequency
-                    WHEN 'weekly'  THEN interval '1 week'
-                    WHEN 'monthly' THEN interval '1 month'
-                    WHEN 'yearly'  THEN interval '1 year'
-                    ELSE interval '100 years'
-                END
-            ) AS d
-        ) o
-        WHERE e.id_user = $1
-            AND o.occurrence_date >= $2::date
-            AND ($4::int IS NULL OR e.id_category = $4)
-        ORDER BY o.occurrence_date DESC, e.id DESC`,
-        [TEST_USER, from, to, category ?? null]
-        )
+                    e.date::timestamp,
+                    LEAST($3::date, COALESCE(e.end_date, $3::date))::timestamp,
+                    CASE e.frequency
+                        WHEN 'weekly'  THEN interval '1 week'
+                        WHEN 'monthly' THEN interval '1 month'
+                        WHEN 'yearly'  THEN interval '1 year'
+                        ELSE interval '100 years'
+                    END
+                ) AS d
+            ) o
+            WHERE e.id_user = $1
+                AND o.occurrence_date >= $2::date
+                AND ($4::int IS NULL OR e.id_category = $4)
+            ORDER BY o.occurrence_date DESC, e.id DESC`,
+            [TEST_USER, from, to, category ?? null]
+            )
         res.json(rows)
     } catch (err) {
         console.error(err)

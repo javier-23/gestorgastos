@@ -26,3 +26,8 @@ docker compose down         # apagarla (los datos se guardan)
 docker compose logs db      # ver qué pasa si algo falla
 docker compose down -v      # apagar y BORRAR todos los datos
 docker compose exec db psql -U gastos_user -d gastos_db  # conectarme a la BD
+
+## Seguridad
+- Uso de bcryptjs para las contraseñas
+- Generación de clave aleatorio para el servidor:
+    node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"

@@ -1,0 +1,21 @@
+meta {
+  name: Get copy
+  type: http
+  seq: 8
+}
+
+get {
+  url: http://localhost:1234/expenses/
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQW5hIiwiaWF0IjoxNzkzMzE1NDE3LCJleHAiOjE3OTMzMTkwMTd9.LGioCMirx1Nt0FxPiNPp0hLDBEfulufr2vMJgi4WLY4
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}

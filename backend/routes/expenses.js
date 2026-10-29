@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
 
     try{
         const {rows} = await pool.query(
-            `SELECT e.id, e.date, e.total, e.concept, e.frecuency, e.end_date,
+            `SELECT e.id, e.date, e.total, e.concept, e.frequency, e.end_date,
               c.id AS category_id, c.name AS category_name,
               c.color AS category_color, c.icon AS category_icon
             FROM expenses e
@@ -105,7 +105,7 @@ router.post('/', async (req, res) => {
     try{
         const { rows } = await pool.query(
             `INSERT INTO expenses (date, total, concept, frequency, end_date, id_category, id_user)
-            SELECT $1, $2, $3, $4, $5, $6, $7
+            SELECT $1, $2, $3, $4, $5, $6, $7::varchar
             FROM category c
             WHERE c.id = $6 AND c.id_user = $7
             RETURNING *`,

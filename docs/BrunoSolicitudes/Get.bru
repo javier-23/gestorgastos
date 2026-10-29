@@ -5,13 +5,18 @@ meta {
 }
 
 get {
-  url: http://localhost:1234/categories
+  url: http://localhost:1234/expenses/occurrences?from=2026-10-29&to=2026-12-31
   body: none
   auth: bearer
 }
 
+params:query {
+  from: 2026-10-29
+  to: 2026-12-31
+}
+
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQW5hIiwiaWF0IjoxNzkzMjk4NjM5LCJleHAiOjE3OTMzMDIyMzl9.XWqyxCYIYc2cnjn_QTdKYqQ9mz8vIZ4dVOdLPIKrAoQ
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQW5hIiwiaWF0IjoxNzkzMzE1NDE3LCJleHAiOjE3OTMzMTkwMTd9.LGioCMirx1Nt0FxPiNPp0hLDBEfulufr2vMJgi4WLY4
 }
 
 settings {

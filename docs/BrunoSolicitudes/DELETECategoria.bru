@@ -1,22 +1,17 @@
 meta {
   name: DELETECategoria
   type: http
-  seq: 4
+  seq: 3
 }
 
 delete {
   url: http://localhost:1234/categories/1
   body: json
-  auth: inherit
+  auth: bearer
 }
 
-body:json {
-  {
-    "name": "Comida",
-    "color": "#FF5734",
-    "icon": "utensils",
-    "type": "expense"
-  }
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoicGVkcm8iLCJpYXQiOjE3OTMzMTQ5NTAsImV4cCI6MTc5MzMxODU1MH0.14jJSZwJvDS1a6EIYYUzMHhmQx-A9rtyjFD0HbLdGR4
 }
 
 settings {

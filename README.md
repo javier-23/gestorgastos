@@ -28,6 +28,7 @@ docker compose down -v      # apagar y BORRAR todos los datos
 docker compose exec db psql -U gastos_user -d gastos_db  # conectarme a la BD
 
 ## Seguridad
-- Uso de bcryptjs para las contraseñas
+- Uso de bcryptjs para las hashear las contraseñas y de jwebtoken para gestionar los token
 - Generación de clave aleatorio para el servidor:
     node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+- Implementación de un middleware para intermediar entre las peticiones del cliente y el servidor, revisando el token y valiando la firma.

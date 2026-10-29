@@ -1,0 +1,31 @@
+meta {
+  name: CrearGasto
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:1234/expenses
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQW5hIiwiaWF0IjoxNzkzMjk4NjM5LCJleHAiOjE3OTMzMDIyMzl9.XWqyxCYIYc2cnjn_QTdKYqQ9mz8vIZ4dVOdLPIKrAoQ
+}
+
+body:json {
+  {
+    "date": "2026-10-29",
+    "total": 30,
+    "concept": "Primer dia gym",
+    "id_category": 1,
+    "frequency": "monthly",
+    "end_date": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

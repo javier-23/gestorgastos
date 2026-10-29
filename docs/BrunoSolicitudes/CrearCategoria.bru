@@ -7,15 +7,18 @@ meta {
 post {
   url: http://localhost:1234/categories
   body: json
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQW5hIiwiaWF0IjoxNzkzMjk4NjM5LCJleHAiOjE3OTMzMDIyMzl9.XWqyxCYIYc2cnjn_QTdKYqQ9mz8vIZ4dVOdLPIKrAoQ
 }
 
 body:json {
   {
-    "name": "Prueba",
+    "name": "Gym",
     "color": "#F54927",
-    "icon": "utensils",
-    "type": "monthly"
+    "icon": "utensils"
   }
 }
 

@@ -48,6 +48,7 @@ router.get('/', async (req, res) => {
     }
 })
 
+// Gastos filtrados
 router.get('/occurrences', async (req, res) => {
     const filters = occurrencesFiltersSchema.safeParse(req.query)
     if (!filters.success) {
@@ -95,7 +96,8 @@ router.get('/occurrences', async (req, res) => {
 router.post('/', async (req, res) => {
     const result = expenseSchema.safeParse(req.body)
     if (!result.success) {
-        return res.status(400).json({ error: result.error.errors })
+        return res.status(400).json({ 
+            error: result.error.issues.map(i => `${i.path.join('.')}: ${i.message}`) })
     }
 
     const { date, total, concept, id_category, frequency, end_date } = result.data
@@ -128,7 +130,8 @@ router.put('/:id', async (req, res) => {
 
     const result = expenseSchema.safeParse(req.body)
     if (!result.success) {
-        return res.status(400).json({ error: result.error.errors })
+        return res.status(400).json({ 
+            error: result.error.issues.map(i => `${i.path.join('.')}: ${i.message}`) })
     }
 
     const { date, total, concept, id_category, frequency, end_date } = result.data

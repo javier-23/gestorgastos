@@ -6,7 +6,7 @@ export const expenseSchema = z.object({
     concept: z.string().trim().max(255).optional(),
     id_category: z.number().int().positive('El id_category debe ser un número entero positivo'),
     frequency: z.enum(['once', 'weekly', 'monthly', 'yearly']).default('once'),
-    end_date: z.iso.date().optional()
+    end_date: z.iso.date().nullish().optional()
   })
   .refine(d => !d.end_date || d.end_date >= d.date, {
     message: 'end_date no puede ser anterior a date',

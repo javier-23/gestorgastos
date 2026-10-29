@@ -4,13 +4,12 @@ import { pool } from '../db.js'
 import { categorySchema, idSchema } from '../schemas/category.js'
 
 const router = Router() // Crear un router (mini aplicación) para manejar las rutas
-const TEST_USER='test'
 
 router.get('/', async (req, res) => {
   try {
     const { rows } = await pool.query(
       'SELECT * FROM category WHERE id_user = $1 ORDER BY name',
-      [TEST_USER]
+      [req.username]
     )
     res.json(rows)
   } catch (err) {
@@ -32,7 +31,7 @@ router.post('/', async (req, res) => {
     try {
         const { rows } = await pool.query(
             'INSERT INTO category (name, color, icon, id_user) VALUES ($1, $2, $3, $4) RETURNING *',
-            [name, color, icon, TEST_USER]
+            [name, color, icon, req.username]
         )
         res.status(201).json(rows[0])
     } catch (err) {
@@ -63,7 +62,7 @@ router.put('/:id', async (req, res) => {
     try{
       const { rows } = await pool.query(
         'UPDATE category SET name = $1, color = $2, icon = $3 WHERE id = $4 AND id_user = $5 RETURNING *',
-        [name, color, icon, id, TEST_USER]
+        [name, color, icon, id, req.username]
       )
       if (rows.length === 0) {
         return res.status(404).json({ error: 'Categoría no encontrada' })
@@ -90,7 +89,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const { rowCount } = await pool.query(
             'DELETE FROM category WHERE id = $1 AND id_user = $2',
-            [id, TEST_USER]
+            [id, req.username]
         )
         if (rowCount === 0) {
             return res.status(404).json({ error: 'Categoría no encontrada' })

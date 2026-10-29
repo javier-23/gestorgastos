@@ -4,7 +4,6 @@ import { expenseSchema, expenseFiltersSchema, occurrencesFiltersSchema} from '..
 import { idSchema } from '../schemas/category.js'
 
 const router = Router() // Crear un router (mini aplicación) para manejar las rutas
-const TEST_USER='test'
 
 // Devuelve todos los valores de expenses con el id de categoria, color e icono
 router.get('/', async (req, res) => {
@@ -16,7 +15,7 @@ router.get('/', async (req, res) => {
     const { from, to, category } = filters.data
 
     const conditions = ['e.id_user = $1']
-    const params = [TEST_USER]
+    const params = [req.username]
 
     if (from) {
         params.push(from)
@@ -84,7 +83,7 @@ router.get('/occurrences', async (req, res) => {
                 AND o.occurrence_date >= $2::date
                 AND ($4::int IS NULL OR e.id_category = $4)
             ORDER BY o.occurrence_date DESC, e.id DESC`,
-            [TEST_USER, from, to, category ?? null]
+            [req.username, from, to, category ?? null]
             )
         res.json(rows)
     } catch (err) {
@@ -108,7 +107,7 @@ router.post('/', async (req, res) => {
             FROM category c
             WHERE c.id = $6 AND c.id_user = $7
             RETURNING *`,
-            [date, total, concept ?? null,  frequency, end_date ?? null, id_category, TEST_USER]
+            [date, total, concept ?? null,  frequency, end_date ?? null, id_category, req.username]
         )
         if (rows.length === 0) {
             return res.status(400).json({ error: 'La categoría no existe o no pertenece al usuario' })
@@ -141,7 +140,7 @@ router.put('/:id', async (req, res) => {
             WHERE id = $7 AND id_user = $8
                 AND EXISTS (SELECT 1 FROM category WHERE id = $4 AND id_user = $8)
             RETURNING *`,
-            [date, total, concept ?? null, id_category, frequency, end_date ?? null, id.data, TEST_USER]
+            [date, total, concept ?? null, id_category, frequency, end_date ?? null, id.data, req.username]
         )
         if (rows.length === 0) {
             return res.status(400).json({ error: 'El gasto no existe o la categoría no es válida' })
@@ -164,7 +163,7 @@ router.delete('/:id', async (req, res) => {
             `DELETE FROM expenses
             WHERE id = $1 AND id_user = $2
             RETURNING *`,
-            [id.data, TEST_USER]
+            [id.data, req.username]
         )
         if (rows.length === 0) {
             return res.status(400).json({ error: 'El gasto no existe o no pertenece al usuario' })

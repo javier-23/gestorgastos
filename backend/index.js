@@ -4,6 +4,8 @@ import categoriesRouter from './routes/categories.js' // Importar el router de c
 import expensesRouter from './routes/expenses.js' // Importar el router de gastos
 import authRouter from './routes/auth.js' // Importar el router de autenticación
 import {authenticateToken} from './middleware/auth.js' // Importar el middleware de autenticación
+import budgetsRouter from './routes/budgets.js' // Importar el router de presupuestos
+import summaryRouter from './routes/summary.js' // Importar el router de resumen
 
 const app = express()
 app.use(express.json())
@@ -22,6 +24,8 @@ app.get('/health', async (req, res) => {
 app.use('/categories', authenticateToken, categoriesRouter)
 app.use('/expenses', authenticateToken, expensesRouter)
 app.use('/auth', authRouter)
+app.use('/budgets', authenticateToken, budgetsRouter)
+app.use('/summary', authenticateToken, summaryRouter)
 
 app.listen(PORT, () => {  
     console.log(`Servidor escuchando en http://localhost:${PORT}`)

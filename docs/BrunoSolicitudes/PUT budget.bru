@@ -1,0 +1,26 @@
+meta {
+  name: PUT budget
+  type: http
+  seq: 9
+}
+
+put {
+  url: http://localhost:1234/budgets/2026-10
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQW5hIiwiaWF0IjoxNzkzNjQ4NzI1LCJleHAiOjE3OTM2NTIzMjV9.xGevDkf11a6CciTelPdIh4C5vVKPI33RnliAfeXVEz4
+}
+
+body:json {
+  {
+    "total": -5
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

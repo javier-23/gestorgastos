@@ -48,7 +48,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-// Gastos filtrados
+// Gastos filtrados repetidos por frecuencia
 router.get('/occurrences', async (req, res) => {
     const filters = occurrencesFiltersSchema.safeParse(req.query)
     if (!filters.success) {
@@ -85,7 +85,7 @@ router.get('/occurrences', async (req, res) => {
                 AND ($4::int IS NULL OR e.id_category = $4)
             ORDER BY o.occurrence_date DESC, e.id DESC`,
             [req.username, from, to, category ?? null]
-            )
+        )
         res.json(rows)
     } catch (err) {
         console.error(err)

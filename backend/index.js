@@ -9,7 +9,7 @@ import summaryRouter from './routes/summary.js' // Importar el router de resumen
 import cors from 'cors' // Importar CORS
 
 const app = express()
-app.use(cors({ origin: 'https://localhost:5173' })) // Habilitar CORS para todas las rutas
+app.use(cors({ origin: 'http://localhost:5173' })) // Habilitar CORS para todas las rutas
 app.use(express.json())
 const PORT = process.env.PORT ?? 1234
 

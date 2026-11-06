@@ -3,10 +3,11 @@ import type { Categoria } from '../types'
 
 interface DashboardProps {
   token: string
+  name: string
   onLogout: () => void
 }
 
-export function Dashboard({ token, onLogout }: DashboardProps) {
+export function Dashboard({ token, name, onLogout }: DashboardProps) {
   const [categorias, setCategorias] = useState<Categoria[]>([])
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export function Dashboard({ token, onLogout }: DashboardProps) {
   return (
     <div>
       <h1>Estás dentro</h1>
+      <h2>¡Bienvenido/a {name}!</h2>
       <button onClick={onLogout}>Cerrar sesión</button>
 
       {categorias.length === 0 && <p>No tienes categorías todavía</p>}

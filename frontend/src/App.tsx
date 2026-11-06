@@ -4,10 +4,12 @@ import { Dashboard } from './components/Dashboard'
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'))
+  const [name, setName] = useState('')
 
-  function handleLogin(newToken: string) {
+  function handleLogin(newToken: string, name: string) {
     localStorage.setItem('token', newToken)
     setToken(newToken)
+    setName(name)
   }
 
   function handleLogout() {
@@ -15,8 +17,8 @@ function App() {
     setToken(null)
   }
 
-  if (!token) return <LoginForm onLogin={handleLogin} />
-  return <Dashboard token={token} onLogout={handleLogout} />
+  if (!token) return <LoginForm onLogin={handleLogin}/>
+  return <Dashboard token={token} name={name} onLogout={handleLogout} />
 }
 
 export default App

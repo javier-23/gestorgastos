@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 interface LoginFormProps {
-  onLogin: (token: string) => void // Función con un parámetro de tipo string y sin valor de retorno
+  onLogin: (token: string, name: string) => void // Función con un parámetro de tipo string y sin valor de retorno
 }
 
 export function LoginForm({ onLogin }: LoginFormProps) {
@@ -24,7 +24,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
       return
     }
 
-    onLogin(data.token)
+    onLogin(data.token, data.name)
   }
 
   return (

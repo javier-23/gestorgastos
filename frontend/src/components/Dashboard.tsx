@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Categoria } from '../types'
+import { CategoryForm } from './CategoryForm'
 
 interface DashboardProps {
   token: string
@@ -34,6 +35,8 @@ export function Dashboard({ token, name, onLogout }: DashboardProps) {
           {c.name}
         </span>
       ))}
+
+      <CategoryForm token={token} onCreated={c => setCategorias([...categorias, c])} />
     </div>
   )
 }

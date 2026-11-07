@@ -17,6 +17,7 @@ function App() {
     setToken(null)
   }
 
+
   if (!token) return <LoginForm onLogin={handleLogin}/>
   return <Dashboard token={token} name={name} onLogout={handleLogout} />
 }

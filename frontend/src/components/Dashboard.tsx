@@ -3,6 +3,7 @@ import type { Categoria, Gasto } from '../types'
 import { CategoryForm } from './CategoryForm'
 import { ExpenseForm } from './ExpenseForm'
 import { FRECUENCIAS, formatDate } from '../fomat.ts'
+import { fetchApi } from '../api.ts';
 
 interface DashboardProps {
   token: string
@@ -16,27 +17,15 @@ export function Dashboard({ token, name, onLogout }: DashboardProps) {
   const [recarga, setRecarga] = useState(0)
 
   useEffect(() => {
-    fetch('http://localhost:1234/categories', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then(async res => {
-      if (res.status === 401) {
-        onLogout()
-        return
-      }
-      setCategorias(await res.json())
-    })
+    fetchApi('/categories').then(
+      setCategorias
+    )
   }, [token, onLogout])
 
   useEffect(() => {
-    fetch('http://localhost:1234/expenses', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then(async res => {
-      if (res.status === 401) {
-        onLogout()
-        return
-      }
-      setGastos(await res.json())
-    })
+    fetchApi('/expenses').then(
+      setGastos
+    )
   }, [token, onLogout, recarga])
 
   return (

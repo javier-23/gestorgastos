@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Categoria } from '../types'
+import { fetchApi } from '../api'
 
 interface ExpenseFormProps {
   token: string
@@ -20,29 +21,23 @@ export function ExpenseForm({ token, categorias, onCreated }: ExpenseFormProps) 
     e.preventDefault()
     setError('')
 
-    const res = await fetch('http://localhost:1234/expenses', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        date,
-        total: Number(total),
-        concept: concept || null,
-        id_category: Number(categoryId),
-        frequency,
-        end_date: frequency === 'once' ? null : endDate || null
-      })
-    })
-    const data = await res.json()
-
-    if (!res.ok) {
-      setError(Array.isArray(data.error) ? data.error.join(', ') : data.error)
-      return
+    try {
+        await fetchApi('/expenses', {
+            method: 'POST',
+            body: JSON.stringify({
+                date,
+                total: Number(total),
+                concept: concept || null,
+                id_category: Number(categoryId),
+                frequency,
+                end_date: frequency === 'once' ? null : endDate || null
+            })
+        })
+        onCreated()
+    } catch (err) {
+        setError(err instanceof Error ? err.message : 'Error')
     }
-
-    onCreated()
+    
     setTotal('')
     setConcept('')
   }

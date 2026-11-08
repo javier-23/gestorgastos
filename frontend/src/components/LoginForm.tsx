@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import {fetchApi} from '../api'
 
 interface LoginFormProps {
   onLogin: (token: string, name: string) => void // Función con un parámetro de tipo string y sin valor de retorno
@@ -11,20 +12,18 @@ export function LoginForm({ onLogin }: LoginFormProps) {
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
+    setError('')
 
-    const res = await fetch('http://localhost:1234/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    })
-    const data = await res.json()
-
-    if (!res.ok) {
-      setError(data.error)
+    try{
+      const data = await fetchApi('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password })
+      })
+      onLogin(data.token, data.name)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error')
       return
     }
-
-    onLogin(data.token, data.name)
   }
 
   return (

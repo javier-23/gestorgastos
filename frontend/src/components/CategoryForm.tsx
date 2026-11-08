@@ -46,7 +46,7 @@ export function CategoryForm({ token, onCreated }: CategoryFormProps) {
                     <option key={color} value={color}>{color}</option>
                 ))}
             </select>
-            <select required value={icon} onChange={(e) => setSelectedIcon(e.target.value)}>
+            <select value={icon} onChange={(e) => setSelectedIcon(e.target.value)}>
                 {ICONOS.map((icon) => (
                     <option key={icon} value={icon}>{icon}</option>
                 ))}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
-import type { Categoria } from '../types'
+import type { Categoria, Gasto } from '../types'
 import { CategoryForm } from './CategoryForm'
+import { ExpenseForm } from './ExpenseForm'
+import { FRECUENCIAS, formatDate } from '../fomat.ts'
 
 interface DashboardProps {
   token: string
@@ -10,6 +12,8 @@ interface DashboardProps {
 
 export function Dashboard({ token, name, onLogout }: DashboardProps) {
   const [categorias, setCategorias] = useState<Categoria[]>([])
+  const [gastos, setGastos] = useState<Gasto[]>([])
+  const [recarga, setRecarga] = useState(0)
 
   useEffect(() => {
     fetch('http://localhost:1234/categories', {
@@ -22,6 +26,18 @@ export function Dashboard({ token, name, onLogout }: DashboardProps) {
       setCategorias(await res.json())
     })
   }, [token, onLogout])
+
+  useEffect(() => {
+    fetch('http://localhost:1234/expenses', {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(async res => {
+      if (res.status === 401) {
+        onLogout()
+        return
+      }
+      setGastos(await res.json())
+    })
+  }, [token, onLogout, recarga])
 
   return (
     <div>
@@ -37,6 +53,19 @@ export function Dashboard({ token, name, onLogout }: DashboardProps) {
       ))}
 
       <CategoryForm token={token} onCreated={c => setCategorias([...categorias, c])} />
+      
+      <ExpenseForm token={token} categorias={categorias} onCreated={() => setRecarga(recarga + 1)} />
+
+      <h2>Gastos</h2>
+      {gastos.length === 0 && <p>No tienes gastos todavía</p>}
+      {gastos.map(g => (
+        <div key={g.id}>
+          <span style={{ background: g.category_color, color: 'white', padding: '2px 8px', marginRight: 8 }}>
+            {g.category_name}
+          </span>
+          <p>{formatDate(g.date)} · {g.concept ?? 'Sin concepto'} · {g.total} € · {FRECUENCIAS[g.frequency]}</p>
+        </div>
+      ))}
     </div>
   )
 }

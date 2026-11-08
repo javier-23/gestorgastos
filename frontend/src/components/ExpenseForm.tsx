@@ -3,12 +3,11 @@ import type { Categoria } from '../types'
 import { fetchApi } from '../api'
 
 interface ExpenseFormProps {
-  token: string
   categorias: Categoria[]
   onCreated: () => void
 }
 
-export function ExpenseForm({ token, categorias, onCreated }: ExpenseFormProps) {
+export function ExpenseForm({categorias, onCreated }: ExpenseFormProps) {
   const [date, setDate] = useState('')
   const [total, setTotal] = useState('')
   const [concept, setConcept] = useState('')
@@ -37,7 +36,7 @@ export function ExpenseForm({ token, categorias, onCreated }: ExpenseFormProps) 
     } catch (err) {
         setError(err instanceof Error ? err.message : 'Error')
     }
-    
+
     setTotal('')
     setConcept('')
   }

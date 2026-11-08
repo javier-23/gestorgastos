@@ -41,9 +41,9 @@ export function Dashboard({ token, name, onLogout }: DashboardProps) {
         </span>
       ))}
 
-      <CategoryForm token={token} onCreated={c => setCategorias([...categorias, c])} />
+      <CategoryForm onCreated={c => setCategorias([...categorias, c])} />
       
-      <ExpenseForm token={token} categorias={categorias} onCreated={() => setRecarga(recarga + 1)} />
+      <ExpenseForm categorias={categorias} onCreated={() => setRecarga(recarga + 1)} />
 
       <h2>Gastos</h2>
       {gastos.length === 0 && <p>No tienes gastos todavía</p>}

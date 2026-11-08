@@ -1,40 +1,36 @@
 import {useState} from 'react';
 import type {Categoria} from '../types.ts';
+import { fetchApi } from '../api.ts';
 
 const COLORES = ['#EF4444', '#F97316', '#EAB308', '#22C55E', '#14B8A6', '#3B82F6', '#8B5CF6', '#EC4899']
 const ICONOS = ['utensils', 'home', 'shopping-cart', 'car', 'heart', 'gamepad', 'briefcase', 'gift']
 
 interface CategoryFormProps{
-    token: string
     onCreated: (category: Categoria) => void
 }
 
-export function CategoryForm({ token, onCreated }: CategoryFormProps) {
+export function CategoryForm({onCreated }: CategoryFormProps) {
     const [name, setCategoryName] = useState('');
     const [color, setSelectedColor] = useState(COLORES[0]);
-    const [icon, setSelectedIcon] = useState(ICONOS[0]);
+    const [icon, setSelectedIcon] = useState('');
     const [error, setError] = useState('');
 
     async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
         setError('');
 
-        const res = await fetch('http://localhost:1234/categories', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({name, color, icon})
-        })
-        const data = await res.json();
-
-        if (!res.ok) {
-            setError(data.error);
-            return;
+        try{
+            const data = await fetchApi('/categories', {
+                method: 'POST',
+                body: JSON.stringify({name, color, icon})
+            })
+            onCreated(data);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Error');
         }
-
-        onCreated(data);
+        setCategoryName('');
+        setSelectedColor(COLORES[0]);
+        setSelectedIcon('');
     }
 
     return (

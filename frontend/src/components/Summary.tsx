@@ -12,7 +12,10 @@ function formatMes(mes: string) {
   return `${year}-${month}`
 }
 
-export function Summary() {
+interface SummaryProps {
+  recarga: number
+}
+export function Summary({ recarga }: SummaryProps) {
   const [mes, setMes] = useState(mesActual)
   const [resumen, setResumen] = useState<Resumen | null>(null)
   const [error, setError] = useState('')
@@ -23,7 +26,7 @@ export function Summary() {
     fetchApi(`/summary?month=${formatMes(mes)}`)
       .then(setResumen)
       .catch(err => setError(err.message))
-  }, [mes])
+  }, [mes, recarga])
 
   const restante = resumen?.remaining ?? 0
   const superado = restante < 0

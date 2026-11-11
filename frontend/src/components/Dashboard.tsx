@@ -46,7 +46,7 @@ export function Dashboard({ token, name, onLogout }: DashboardProps) {
       
       <ExpenseForm categorias={categorias} onCreated={() => setRecarga(recarga + 1)} />
 
-      <Summary/>
+      <Summary recarga={recarga} />
 
       <h2>Gastos</h2>
       {gastos.length === 0 && <p>No tienes gastos todavía</p>}

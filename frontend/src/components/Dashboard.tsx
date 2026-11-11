@@ -4,6 +4,7 @@ import { CategoryForm } from './CategoryForm'
 import { ExpenseForm } from './ExpenseForm'
 import { FRECUENCIAS, formatDate } from '../fomat.ts'
 import { fetchApi } from '../api.ts';
+import { Summary } from './Summary.tsx';
 
 interface DashboardProps {
   token: string
@@ -44,6 +45,8 @@ export function Dashboard({ token, name, onLogout }: DashboardProps) {
       <CategoryForm onCreated={c => setCategorias([...categorias, c])} />
       
       <ExpenseForm categorias={categorias} onCreated={() => setRecarga(recarga + 1)} />
+
+      <Summary/>
 
       <h2>Gastos</h2>
       {gastos.length === 0 && <p>No tienes gastos todavía</p>}

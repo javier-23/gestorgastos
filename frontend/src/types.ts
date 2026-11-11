@@ -17,3 +17,16 @@ export interface Gasto {
   category_color: string
   category_icon: string | null
 }
+
+export interface Resumen {
+  month: string
+  budget: number | null
+  spent: number
+  remaining: number
+  byCategory: {
+    id: number
+    name: string
+    color: string
+    total: number
+  }[]
+}

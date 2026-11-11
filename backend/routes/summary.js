@@ -31,10 +31,11 @@ const OCCURRENCES = `
   )
 `
 
+// GET /summary?month=YYYY-MM: Devuelve un resumen de gastos y presupuesto para el mes especificado
 router.get('/', async (req, res) => {
   const month = monthSchema.safeParse(req.query.month)
   if (!month.success) {
-    return res.status(400).json({ error: 'month es obligatorio, formato YYYY-MM' })
+    return res.status(400).json({ error: 'El mes es obligatorio, formato YYYY-MM' })
   }
   const firstDay = `${month.data}-01`
 
@@ -63,6 +64,7 @@ router.get('/', async (req, res) => {
     const spentTotal = Number(spent.rows[0].spent)
     const budgetTotal = budget.rows[0] ? Number(budget.rows[0].total) : null
 
+    // Devolver el resumen: mes, presupuesto, gastado, restante y por categoría
     res.json({
       month: month.data,
       budget: budgetTotal,

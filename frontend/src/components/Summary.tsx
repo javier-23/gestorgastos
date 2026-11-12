@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react'
 import { fetchApi } from '../api'
 import type { Resumen } from '../types'
+import { Budget } from './Budget.tsx';
 
 // Función para obtener el mes actual en formato YYYY-MM (base de datos)
 function mesActual() {
   const hoy = new Date()
   return `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`
-}
-
-function formatMes(mes: string) {
-  const [month, year] = mes.split('/')
-  return `${year}-${month}`
 }
 
 interface SummaryProps {
@@ -20,6 +16,7 @@ export function Summary({ recarga }: SummaryProps) {
   const [mes, setMes] = useState(mesActual)
   const [resumen, setResumen] = useState<Resumen | null>(null)
   const [error, setError] = useState('')
+  const [guardado, setGuardado] = useState(0)
 
   // Función para cambiar el mes actual en la vista según el delta (1 para siguiente mes, -1 para mes anterior)
   function cambiarMes(mes: string, delta: number) {
@@ -41,7 +38,7 @@ export function Summary({ recarga }: SummaryProps) {
     fetchApi(`/summary?month=${mes}`)
       .then(setResumen)
       .catch(err => setError(err.message))
-  }, [mes, recarga])
+  }, [mes, recarga, guardado])
 
   const restante = resumen?.remaining ?? 0
   const superado = restante < 0
@@ -98,16 +95,18 @@ export function Summary({ recarga }: SummaryProps) {
               </div>
         </section>
 
-          <h3>Por categoría</h3>
-          {resumen.byCategory.length === 0 && <p>Sin gastos este mes</p>}
-          {resumen.byCategory.map(c => (
-            <p key={c.id}>
-              <span style={{ background: c.color, color: 'white', padding: '2px 8px', marginRight: 8 }}>
-                {c.name}
-              </span>
-              {c.total}€
-            </p>
-          ))}
+        <h3>Por categoría</h3>
+        {resumen.byCategory.length === 0 && <p>Sin gastos este mes</p>}
+        {resumen.byCategory.map(c => (
+          <p key={c.id}>
+            <span style={{ background: c.color, color: 'white', padding: '2px 8px', marginRight: 8 }}>
+              {c.name}
+            </span>
+            {c.total}€
+          </p>
+        ))}
+
+        <Budget mes={mes} onSaved={() => setGuardado(g => g + 1)} />
         </>
       )}
     </div>

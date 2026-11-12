@@ -5,7 +5,6 @@ import { ExpenseForm } from './ExpenseForm'
 import { FRECUENCIAS, formatDate } from '../fomat.ts'
 import { fetchApi } from '../api.ts';
 import { Summary } from './Summary.tsx';
-import { Budget } from './Budget.tsx';
 
 interface DashboardProps {
   token: string
@@ -48,8 +47,6 @@ export function Dashboard({ token, name, onLogout }: DashboardProps) {
       <ExpenseForm categorias={categorias} onCreated={() => setRecarga(recarga + 1)} />
 
       <Summary recarga={recarga} />
-
-      <Budget />
 
       <h2>Gastos</h2>
       {gastos.length === 0 && <p>No tienes gastos todavía</p>}

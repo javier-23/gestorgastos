@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import { fetchApi } from '../api'
 
-export function Budget() {
-    const [budget, setBudget] = useState(0)
-    const [month, setMonth] = useState(new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0'))
+interface BudgetProps {
+  mes: string
+  onSaved: () => void
+}
+
+export function Budget({ mes, onSaved }: BudgetProps) {
+    const [total, setTotal] = useState('')
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
 
@@ -13,13 +17,13 @@ export function Budget() {
         setSuccess(false)
 
         try {
-            await fetchApi(`/budget/${month}`, {
+            await fetchApi(`/budgets/${mes}`, {
                 method: 'PUT',
-                body: JSON.stringify({budget})
+                body: JSON.stringify({total: Number(total)}),
             })
-            setBudget(0)
-            setMonth('')
+            setTotal('')
             setSuccess(true)
+            onSaved()
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Error')
             return
@@ -27,15 +31,12 @@ export function Budget() {
     }
 
     return (
-        <div>
-            <h1>Presupuesto</h1>
-            <form onSubmit={handleSubmit}>
-            <input type="number" step="100" placeholder="Total" value={budget} onChange={e => setBudget(Number(e.target.value))} />
-            <input placeholder="Mes" value={month} onChange={e => setMonth(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+            <h3>Presupuesto</h3>
+            <input type="number" min="0.01" step="0.01" placeholder="Presupuesto mes actual" value={total} onChange={e => setTotal(e.target.value)} required />
             <button type="submit">Guardar presupuesto</button>
-            {success && <p>¡Presupuesto creado!</p>}
+            {success && <p>¡Presupuesto guardado!</p>}
             {error && <p>{error}</p>}
         </form>
-        </div>
     )
 }

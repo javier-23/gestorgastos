@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { fetchApi } from '../api'
 import type { Resumen } from '../types'
 
+// Función para obtener el mes actual en formato YYYY-MM (base de datos)
 function mesActual() {
   const hoy = new Date()
-  return `${String(hoy.getMonth() + 1).padStart(2, '0')}/${hoy.getFullYear()}`
+  return `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`
 }
 
 function formatMes(mes: string) {
@@ -20,10 +21,24 @@ export function Summary({ recarga }: SummaryProps) {
   const [resumen, setResumen] = useState<Resumen | null>(null)
   const [error, setError] = useState('')
 
+  // Función para cambiar el mes actual en la vista según el delta (1 para siguiente mes, -1 para mes anterior)
+  function cambiarMes(mes: string, delta: number) {
+    const [year, month] = mes.split('-').map(Number)
+    const newDate = new Date(year, month - 1 + delta, 1)
+    setMes(`${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}`)
+  }
+
+  // Función para obtener el nombre del mes en formato largo a partir del formato YYYY-MM
+  function nombreMes(mes: string) {
+    const [year, month] = mes.split('-').map(Number)
+    const date = new Date(year, month - 1, 1)
+    return date.toLocaleString('es-ES', { month: 'long', year: 'numeric' })
+  }
+
   useEffect(() => {
     if (!mes) return
     setError('')
-    fetchApi(`/summary?month=${formatMes(mes)}`)
+    fetchApi(`/summary?month=${mes}`)
       .then(setResumen)
       .catch(err => setError(err.message))
   }, [mes, recarga])
@@ -37,8 +52,10 @@ export function Summary({ recarga }: SummaryProps) {
   return (
     <div>
       <h2>Resumen mensual</h2>
-      <input type="month" value={mes} placeholder="MM/YYYY" onChange={e => setMes(e.target.value)} />
-      {error && <p>El mes es obligatorio, formato MM/YYYY</p>}
+      <button onClick={() => cambiarMes(mes, -1)} aria-label="Mes anterior">Mes anterior</button>
+      <span style={{ margin: '0 12px' }}>{nombreMes(mes)}</span>
+      <button onClick={() => cambiarMes(mes, 1)} aria-label="Mes siguiente">Mes siguiente</button>
+      {error && <p>{error}</p>}
 
       {resumen && (
         <>

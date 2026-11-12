@@ -1,6 +1,7 @@
 import { useState} from 'react'
 import { LoginForm } from './components/LoginForm'
 import { Dashboard } from './components/Dashboard'
+import { Register } from './components/Register'
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'))

@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { fetchApi } from '../api'
 import type { Resumen } from '../types'
 import { Budget } from './Budget.tsx';
+import { cambiarMes } from '../types'
+import { LinealChart } from './LinealChart.tsx'
+import { useHistorial } from '../hook/useHistorial.ts'
 
 // Función para obtener el mes actual en formato YYYY-MM (base de datos)
 function mesActual() {
@@ -17,13 +20,7 @@ export function Summary({ recarga }: SummaryProps) {
   const [resumen, setResumen] = useState<Resumen | null>(null)
   const [error, setError] = useState('')
   const [guardado, setGuardado] = useState(0)
-
-  // Función para cambiar el mes actual en la vista según el delta (1 para siguiente mes, -1 para mes anterior)
-  function cambiarMes(mes: string, delta: number) {
-    const [year, month] = mes.split('-').map(Number)
-    const newDate = new Date(year, month - 1 + delta, 1)
-    setMes(`${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}`)
-  }
+  const { historial, error: errorHistorial } = useHistorial(mes, recarga + guardado)
 
   // Función para obtener el nombre del mes en formato largo a partir del formato YYYY-MM
   function nombreMes(mes: string) {
@@ -107,6 +104,8 @@ export function Summary({ recarga }: SummaryProps) {
         ))}
 
         <Budget mes={mes} onSaved={() => setGuardado(g => g + 1)} />
+
+        <LinealChart datos={historial} />
         </>
       )}
     </div>

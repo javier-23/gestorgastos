@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { fetchApi } from '../api'
 import type { Resumen } from '../types'
 import { Budget } from './Budget.tsx';
-import { cambiarMes } from '../types'
+import { cambiarMes } from '../format.ts'
 import { LinealChart } from './LinealChart.tsx'
 import { useHistorial } from '../hooks/useHistorial.ts'
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { fetchApi } from '../api'
 import type { Resumen } from '../types'
 import type { PuntoHistorial } from '../components/LinealChart.tsx'
-import { cambiarMes } from '../types'
+import { cambiarMes } from '../format.ts'
 
 function nombreMesCorto(mes: string) {
   const [year, month] = mes.split('-').map(Number)

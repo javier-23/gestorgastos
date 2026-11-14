@@ -30,11 +30,3 @@ export interface Resumen {
     total: number
   }[]
 }
-
-// Función para cambiar el mes actual en la vista según el delta (1 para siguiente mes, -1 para mes anterior). 
-// Usada en summary y useHistorial
-export function cambiarMes(mes: string, delta: number) {
-  const [year, month] = mes.split('-').map(Number)
-  const fecha = new Date(year, month - 1 + delta, 1)
-  return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}`
-}

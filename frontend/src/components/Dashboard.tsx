@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Categoria, Gasto } from '../types'
 import { CategoryForm } from './CategoryForm'
 import { ExpenseForm } from './ExpenseForm'
-import { FRECUENCIAS, formatDate } from '../fomat.ts'
+import { FRECUENCIAS, formatDate } from '../format.ts'
 import { fetchApi } from '../api.ts';
 import { Summary } from './Summary.tsx';
 

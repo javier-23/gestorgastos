@@ -1,4 +1,4 @@
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
 export interface PuntoHistorial {
   mes: string
@@ -20,11 +20,9 @@ export function LinealChart({ datos }: HistoryChartProps) {
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={datos}>
           <XAxis dataKey="mes" />
-          <YAxis />
           <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="ingresos" name="Ingresos" stroke="#22C55E" />
-          <Line type="monotone" dataKey="gastos" name="Gastos" stroke="#EF4444" />
+          <Line type="monotone" dataKey="ingresos" name="Ingresos" stroke="#038934" dot={false} />
+          <Line type="monotone" dataKey="gastos" name="Gastos" stroke="#921c1c" dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </section>

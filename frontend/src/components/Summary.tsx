@@ -4,7 +4,7 @@ import type { Resumen } from '../types'
 import { Budget } from './Budget.tsx';
 import { cambiarMes } from '../types'
 import { LinealChart } from './LinealChart.tsx'
-import { useHistorial } from '../hook/useHistorial.ts'
+import { useHistorial } from '../hooks/useHistorial.ts'
 
 // Función para obtener el mes actual en formato YYYY-MM (base de datos)
 function mesActual() {
@@ -46,9 +46,9 @@ export function Summary({ recarga }: SummaryProps) {
   return (
     <div>
       <h2>Resumen mensual</h2>
-      <button onClick={() => cambiarMes(mes, -1)} aria-label="Mes anterior">Mes anterior</button>
+      <button onClick={() => setMes(cambiarMes(mes, -1))} aria-label="Mes anterior">Mes anterior</button>
       <span style={{ margin: '0 12px' }}>{nombreMes(mes)}</span>
-      <button onClick={() => cambiarMes(mes, 1)} aria-label="Mes siguiente">Mes siguiente</button>
+      <button onClick={() => setMes(cambiarMes(mes, 1))} aria-label="Mes siguiente">Mes siguiente</button>
       {error && <p>{error}</p>}
 
       {resumen && (

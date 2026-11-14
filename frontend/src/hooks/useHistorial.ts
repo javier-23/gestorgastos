@@ -17,6 +17,7 @@ export function useHistorial(mes: string, refrescar: number) {
   useEffect(() => {
     const meses = [-5, -4, -3, -2, -1, 0].map(d => cambiarMes(mes, d))
 
+    // Obtener los resúmenes de los últimos 6 meses a la vez
     Promise.all(meses.map(m => fetchApi(`/summary?month=${m}`)))
       .then((resumenes: Resumen[]) => {
         setError('')

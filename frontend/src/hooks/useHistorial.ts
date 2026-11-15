@@ -21,7 +21,7 @@ export function useHistorial(mes: string, refrescar: number) {
     Promise.all(meses.map(m => fetchApi(`/summary?month=${m}`)))
       .then((resumenes: Resumen[]) => {
         setError('')
-        setHistorial(resumenes.map((r, i) => ({
+        setHistorial(resumenes.map((r, i) => ({ // r es el resumen de cada mes, i es el índice del mes
           mes: nombreMesCorto(meses[i]),
           ingresos: r.budget ?? 0,
           gastos: r.spent,

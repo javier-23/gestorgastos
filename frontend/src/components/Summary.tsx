@@ -17,19 +17,25 @@ interface SummaryProps {
   recarga: number
 }
 
+// Recarga: número que se incrementa cada vez que se guarda un gasto
 export function Summary({ recarga }: SummaryProps) {
   const [mes, setMes] = useState(mesActual)
   const [resumen, setResumen] = useState<Resumen | null>(null)
   const [error, setError] = useState('')
-  const [guardado, setGuardado] = useState(0)
+  const [guardado, setGuardado] = useState(0) // Para forzar la recarga del resumen cuando se guarda un presupuesto
   const { historial, error: errorHistorial } = useHistorial(mes, recarga + guardado)
 
-  // Calcular las diferencias de gasto y ahorro entre el mes actual y el anterior
   const mesAnterior = cambiarMes(mes, -1)
-  const actual = historial[5]
-  const anterior = historial[4]
-  const difGasto = actual && anterior && anterior.gastos != 0 ? (actual.gastos - anterior.gastos)/anterior.gastos * 100  : null
-  const difAhorro = actual?.ahorro != null && anterior?.ahorro != null && anterior?.ahorro != 0 ? (actual.ahorro - anterior.ahorro)/anterior.ahorro * 100 : null
+
+  // Calcular las diferencias de gasto y ahorro entre el mes actual y el anterior
+  const actual = historial[5] // El mes actual es el último del historial
+  const anterior = historial[4] // El mes anterior es el penúltimo del historial
+  const difGasto = actual && anterior && anterior.gastos != 0 ? // Se pone anterior.gastos != 0 para evitar división por cero (no sale NaN ni Infinity)
+                      (actual.gastos - anterior.gastos)/anterior.gastos * 100  
+                      : null
+  const difAhorro = actual?.ahorro != null && anterior?.ahorro != null && anterior?.ahorro != 0 ? // Se pone anterior.ahorro != 0 para evitar división por cero (no sale NaN ni Infinity)
+                      (actual.ahorro - anterior.ahorro)/anterior.ahorro * 100 
+                      : null
 
   useEffect(() => {
     if (!mes) return
@@ -39,6 +45,7 @@ export function Summary({ recarga }: SummaryProps) {
       .catch(err => setError(err.message))
   }, [mes, recarga, guardado])
 
+  // Calcular el ahorro (presupuesto-gasto) y si se ha superado o no
   const restante = resumen?.remaining ?? 0
   const superado = restante < 0
   const porcentaje = resumen?.budget

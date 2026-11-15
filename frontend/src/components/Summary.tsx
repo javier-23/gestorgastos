@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { fetchApi } from '../api'
 import type { Resumen } from '../types'
 import { Budget } from './Budget.tsx';
-import { cambiarMes } from '../format.ts'
+import { cambiarMes, nombreMes } from '../format.ts'
 import { LinealChart } from './LinealChart.tsx'
 import { useHistorial } from '../hooks/useHistorial.ts'
+import { Comparasion } from './Comparasion.tsx'
 
 // Función para obtener el mes actual en formato YYYY-MM (base de datos)
 function mesActual() {
@@ -15,6 +16,7 @@ function mesActual() {
 interface SummaryProps {
   recarga: number
 }
+
 export function Summary({ recarga }: SummaryProps) {
   const [mes, setMes] = useState(mesActual)
   const [resumen, setResumen] = useState<Resumen | null>(null)
@@ -22,12 +24,12 @@ export function Summary({ recarga }: SummaryProps) {
   const [guardado, setGuardado] = useState(0)
   const { historial, error: errorHistorial } = useHistorial(mes, recarga + guardado)
 
-  // Función para obtener el nombre del mes en formato largo a partir del formato YYYY-MM
-  function nombreMes(mes: string) {
-    const [year, month] = mes.split('-').map(Number)
-    const date = new Date(year, month - 1, 1)
-    return date.toLocaleString('es-ES', { month: 'long', year: 'numeric' })
-  }
+  // Calcular las diferencias de gasto y ahorro entre el mes actual y el anterior
+  const mesAnterior = cambiarMes(mes, -1)
+  const actual = historial[5]
+  const anterior = historial[4]
+  const difGasto = actual && anterior && anterior.gastos != 0 ? (actual.gastos - anterior.gastos)/anterior.gastos * 100  : null
+  const difAhorro = actual?.ahorro != null && anterior?.ahorro != null && anterior?.ahorro != 0 ? (actual.ahorro - anterior.ahorro)/anterior.ahorro * 100 : null
 
   useEffect(() => {
     if (!mes) return
@@ -57,6 +59,9 @@ export function Summary({ recarga }: SummaryProps) {
           <div style={{ border: '1px solid #e5e7eb', padding: 12, marginBottom: 12 }}>
             <h4>Total Gasto</h4>
             <p>{resumen.spent}€</p>
+            {difGasto !== null && (
+              <Comparasion diff={difGasto} mes={nombreMes(mesAnterior)} subirEsBueno={false} />
+            )}
           </div>
         
           <div style={{ border: '1px solid #e5e7eb', padding: 12, marginBottom: 12 }}>
@@ -73,6 +78,9 @@ export function Summary({ recarga }: SummaryProps) {
           <div style={{ border: '1px solid #e5e7eb', padding: 12, marginBottom: 12 }}>
             <h4>{superado ? 'Te has pasado en ' : 'Ahorro '}</h4>
             <p>{Math.abs(restante)}€</p>
+            {difAhorro !== null && (
+              <Comparasion diff={difAhorro} mes={nombreMes(mesAnterior)} subirEsBueno={true} />
+            )}
           </div>
         </section>
 

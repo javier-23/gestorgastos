@@ -17,3 +17,11 @@ export function cambiarMes(mes: string, delta: number) {
   const fecha = new Date(year, month - 1 + delta, 1)
   return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}`
 }
+
+// Función para obtener el nombre del mes en formato largo a partir del formato YYYY-MM
+export function nombreMes(mes: string) {
+  const [year, month] = mes.split('-').map(Number)
+  const date = new Date(year, month - 1, 1)
+  const nombre = date.toLocaleString('es-ES', { month: 'long' })
+  return nombre.charAt(0).toUpperCase() + nombre.slice(1)
+}

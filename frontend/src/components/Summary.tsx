@@ -6,6 +6,7 @@ import { cambiarMes, nombreMes } from '../format.ts'
 import { LinealChart } from './LinealChart.tsx'
 import { useHistorial } from '../hooks/useHistorial.ts'
 import { Comparasion } from './Comparasion.tsx'
+import { CategoryDonut} from './CategoryDonut.tsx'
 
 // Función para obtener el mes actual en formato YYYY-MM (base de datos)
 function mesActual() {
@@ -16,6 +17,14 @@ function mesActual() {
 interface SummaryProps {
   recarga: number
 }
+
+const prueba = [
+    { id: 1, name: 'Comida', color: '#FF6384', total: 200 },
+    { id: 2, name: 'Transporte', color: '#36A2EB', total: 100 },
+    { id: 3, name: 'Entretenimiento', color: '#FFCE56', total: 150 },
+    { id: 4, name: 'Salud', color: '#4BC0C0', total: 80 },
+    { id: 5, name: 'Educación', color: '#9966FF', total: 120 }
+];
 
 // Recarga: número que se incrementa cada vez que se guarda un gasto
 export function Summary({ recarga }: SummaryProps) {
@@ -121,6 +130,8 @@ export function Summary({ recarga }: SummaryProps) {
         <Budget mes={mes} onSaved={() => setGuardado(g => g + 1)} />
 
         <LinealChart datos={historial} />
+
+        <CategoryDonut datos={prueba} />
         </>
       )}
     </div>

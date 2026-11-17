@@ -30,3 +30,12 @@ export interface Resumen {
     total: number
   }[]
 }
+export interface Ocurrencia {
+  id: number
+  occurrence_date: string
+  total: string
+  concept: string | null
+  frequency: Gasto['frequency']
+  category_name: string
+  category_color: string
+}

@@ -7,7 +7,7 @@ export function Comparasion({ diff, mes, subirEsBueno }: { diff: number, mes: st
     const icono = (subirEsBueno ? ( diff > 0 ? '▲' : '▼') : ( diff < 0 ? '▼' : '▲'))
 
     return(
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: color, color: 'white', padding: 4, borderRadius: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: color, color: 'white', padding: 4, borderRadius: 14 }}>
             <span>{icono} {Math.round(diff)}% vs {mes}</span>
         </div>
     )

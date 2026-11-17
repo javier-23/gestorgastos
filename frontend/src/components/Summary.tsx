@@ -18,14 +18,6 @@ interface SummaryProps {
   recarga: number
 }
 
-const prueba = [
-    { id: 1, name: 'Comida', color: '#FF6384', total: 200 },
-    { id: 2, name: 'Transporte', color: '#36A2EB', total: 100 },
-    { id: 3, name: 'Entretenimiento', color: '#FFCE56', total: 150 },
-    { id: 4, name: 'Salud', color: '#4BC0C0', total: 80 },
-    { id: 5, name: 'Educación', color: '#9966FF', total: 120 }
-];
-
 // Recarga: número que se incrementa cada vez que se guarda un gasto
 export function Summary({ recarga }: SummaryProps) {
   const [mes, setMes] = useState(mesActual)
@@ -131,7 +123,7 @@ export function Summary({ recarga }: SummaryProps) {
 
         <LinealChart datos={historial} />
 
-        <CategoryDonut datos={prueba} />
+        <CategoryDonut datos={resumen.byCategory} totalGastos={resumen.spent} />
         </>
       )}
     </div>

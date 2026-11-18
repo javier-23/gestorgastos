@@ -7,6 +7,7 @@ import { LinealChart } from './LinealChart.tsx'
 import { useHistorial } from '../hooks/useHistorial.ts'
 import { Comparasion } from './Comparasion.tsx'
 import { CategoryDonut} from './CategoryDonut.tsx'
+import { TopExpenses } from './TopExpenses.tsx';
 
 // Función para obtener el mes actual en formato YYYY-MM (base de datos)
 function mesActual() {
@@ -124,6 +125,8 @@ export function Summary({ recarga }: SummaryProps) {
         <LinealChart datos={historial} />
 
         <CategoryDonut datos={resumen.byCategory} totalGastos={resumen.spent} />
+
+        <TopExpenses mes={mes} refrescar={recarga} />
         </>
       )}
     </div>

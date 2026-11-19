@@ -40,7 +40,7 @@ export function CategoryDonut({ datos, totalGastos }: CategoriaDonutProps) {
     }
 
     return (
-    <section style={{ border: '1px solid #e5e7eb', padding: 12, marginBottom: 12 }}>
+    <div style={{ border: '1px solid #e5e7eb', padding: 12, marginBottom: 12 }}>
       <h4>Gasto por categoría</h4>
       <ResponsiveContainer width="100%" height={250}>
         <PieChart>
@@ -70,6 +70,6 @@ export function CategoryDonut({ datos, totalGastos }: CategoriaDonutProps) {
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   )
 }

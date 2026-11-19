@@ -30,38 +30,45 @@ export function TopExpenses({mes, refrescar}: TopExpensesProps){
             .catch(err => { setError(err.message)
         })
 
-    },[refrescar])
+    },[mes,refrescar])
 
     return(
-        <section style={{border:'1px solid white'}}>
+        <div style={{border:'1px solid white'}}>
             <h4>Últimos gastos del mes</h4>
             {error && <p>{error}</p>}
             {!error && gastos.length === 0 && <p>Sin gastos este mes</p>}
 
-            <ol style={{ listStyle: 'none', padding: 0, margin: 0}}>
-                <li style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12}}>
-                    <span>CONCEPTO</span>
-                    <span>CATEGORÍA</span>
-                    <span>TIPO</span>
-                    <span>FECHA</span>
-                    <span>IMPORTE</span>
-                </li>
-                {gastos.map(g => 
-                    <li 
-                        key={g.id}
-                        style={{display: 'flex', alignItems: 'center',justifyContent: 'center', gap: 12, borderBottom: '1px solid #f3f4f6'}}
-                    >
-                        <span>{g.concept ?? 'Sin concepto'}</span>
-                        <span style={{ background: g.category_color, color: 'white', padding: '2px 8px', borderRadius: 4 }}>
-                            {g.category_name}
-                        </span>
-                        <span>{FRECUENCIAS[g.frequency]}</span>
-                        <span>{formatDate(g.occurrence_date)}</span>
-                        <span>{g.total}</span>
-                    </li>
-                )}
-            </ol>
+            {gastos.length > 0 && (
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                    <tr style={{ textAlign: 'left', borderBottom: '2px solid #e5e7eb' }}>
+                        <th style={{ padding: '8px 4px' }}>Concepto</th>
+                        <th style={{ padding: '8px 4px' }}>Categoría</th>
+                        <th style={{ padding: '8px 4px' }}>Frecuencia</th>
+                        <th style={{ padding: '8px 4px' }}>Fecha</th>
+                        <th style={{ padding: '8px 4px', textAlign: 'right' }}>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {gastos.map(g => (
+                        <tr key={`${g.id}-${g.date}`} style={{ textAlign: 'left',borderBottom: '1px solid #f3f4f6' }}>
+                            <td style={{ padding: '8px 4px' }}>{g.concept ?? 'Sin concepto'}</td>
+                            <td style={{ padding: '8px 4px' }}>
+                                <span style={{ background: g.category_color, color: 'white', padding: '2px 8px', borderRadius: 4 }}>
+                                {g.category_name}
+                                </span>
+                            </td>
+                            <td style={{ padding: '8px 4px' }}>{FRECUENCIAS[g.frequency]}</td>
+                            <td style={{ padding: '8px 4px' }}>{formatDate(g.date)}</td>
+                            <td style={{ padding: '8px 4px', textAlign: 'right' }}>
+                                <strong>{Number(g.total).toFixed(2)} €</strong>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            )}
 
-        </section>
+        </div>
     )
 }

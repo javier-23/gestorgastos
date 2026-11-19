@@ -58,7 +58,7 @@ export function Summary({ recarga }: SummaryProps) {
     <div>
       <h2>Resumen mensual</h2>
       <button onClick={() => setMes(cambiarMes(mes, -1))} aria-label="Mes anterior">Mes anterior</button>
-      <span style={{ margin: '0 12px' }}>{nombreMes(mes)}</span>
+        <span style={{ margin: '0 12px' }}>{nombreMes(mes)}</span>
       <button onClick={() => setMes(cambiarMes(mes, 1))} aria-label="Mes siguiente">Mes siguiente</button>
       {error && <p>{error}</p>}
 
@@ -109,22 +109,12 @@ export function Summary({ recarga }: SummaryProps) {
               </div>
         </section>
 
-        <h3>Por categoría</h3>
-        {resumen.byCategory.length === 0 && <p>Sin gastos este mes</p>}
-        {resumen.byCategory.map(c => (
-          <p key={c.id}>
-            <span style={{ background: c.color, color: 'white', padding: '2px 8px', marginRight: 8 }}>
-              {c.name}
-            </span>
-            {c.total}€
-          </p>
-        ))}
-
         <Budget mes={mes} onSaved={() => setGuardado(g => g + 1)} />
 
-        <LinealChart datos={historial} />
-
-        <CategoryDonut datos={resumen.byCategory} totalGastos={resumen.spent} />
+        <section>
+          <LinealChart datos={historial} />
+          <CategoryDonut datos={resumen.byCategory} totalGastos={resumen.spent} />
+        </section>
 
         <TopExpenses mes={mes} refrescar={recarga} />
         </>

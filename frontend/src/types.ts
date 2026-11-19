@@ -32,7 +32,7 @@ export interface Resumen {
 }
 export interface Ocurrencia {
   id: number
-  occurrence_date: string
+  date: string
   total: string
   concept: string | null
   frequency: Gasto['frequency']

@@ -15,7 +15,7 @@ export function LinealChart({ datos }: HistoryChartProps) {
   if (datos.length === 0) return null
 
   return (
-    <section style={{ border: '1px solid #e5e7eb', padding: 12, marginBottom: 12 }}>
+    <div style={{ border: '1px solid #e5e7eb', padding: 12, marginBottom: 12 }}>
       <h4>Ingresos vs gastos (últimos 6 meses)</h4>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={datos}>
@@ -25,6 +25,6 @@ export function LinealChart({ datos }: HistoryChartProps) {
           <Line type="monotone" dataKey="gastos" name="Gastos" stroke="#921c1c" dot={false} />
         </LineChart>
       </ResponsiveContainer>
-    </section>
+    </div>
   )
 }

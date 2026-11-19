@@ -16,6 +16,7 @@ export async function fetchApi(path: string, options: RequestInit = {}) {
     window.location.reload()
   }
 
+  if (res.status === 204) return null
   const data = await res.json()
 
   if (!res.ok) {

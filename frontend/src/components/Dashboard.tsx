@@ -29,6 +29,16 @@ export function Dashboard({ token, name, onLogout }: DashboardProps) {
     )
   }, [token, onLogout, recarga])
 
+  async function borrarGasto(id: number) {
+    if (!window.confirm('¿Borrar este gasto? Si es recurrente, se borran todas sus repeticiones.')) return
+    try {
+      await fetchApi(`/expenses/${id}`, { method: 'DELETE' })
+      setRecarga(r => r + 1)
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Error')
+    }
+  }
+
   return (
     <div>
       <h1>Estás dentro</h1>
@@ -56,6 +66,7 @@ export function Dashboard({ token, name, onLogout }: DashboardProps) {
             {g.category_name}
           </span>
           <p>{formatDate(g.date)} · {g.concept ?? 'Sin concepto'} · {g.total} € · {FRECUENCIAS[g.frequency]}</p>
+          <button onClick={() => borrarGasto(g.id)}>Borrar</button>
         </div>
       ))}
     </div>

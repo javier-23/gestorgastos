@@ -27,6 +27,7 @@ export const expenseFiltersSchema = z.object({
 export const occurrencesFiltersSchema = z.object({
   from: z.iso.date(),
   to: z.iso.date(),
-  category: z.coerce.number().int().positive().optional()
+  category: z.coerce.number().int().positive().optional(),
+  limit: z.coerce.number().int().positive().optional()
 })
 

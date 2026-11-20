@@ -25,8 +25,8 @@ export function TopExpenses({mes, refrescar}: TopExpensesProps){
     useEffect(()=>{
         const {from, to} = rangoDelMes(mes)
 
-        fetchApi(`/expenses/occurrences?from=${from}&to=${to}`)
-            .then((datos: Ocurrencia[]) => setGastos(datos.slice(0, MAX_GASTOS)))
+        fetchApi(`/expenses/occurrences?from=${from}&to=${to}&limit=${MAX_GASTOS}`)
+            .then((datos: Ocurrencia[]) => setGastos(datos))
             .catch(err => { setError(err.message)
         })
 

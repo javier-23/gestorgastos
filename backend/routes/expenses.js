@@ -55,7 +55,7 @@ router.get('/occurrences', async (req, res) => {
         return res.status(400).json({ error: filters.error.errors })
     }
 
-    const { from, to, category } = filters.data
+    const { from, to, category, limit } = filters.data
 
     try {
         // COALESCE: usa end_date si no es nulo, de lo contrario usa to
@@ -83,8 +83,9 @@ router.get('/occurrences', async (req, res) => {
             WHERE e.id_user = $1
                 AND o.occurrence_date >= $2::date
                 AND ($4::int IS NULL OR e.id_category = $4)
-            ORDER BY o.occurrence_date DESC, e.id DESC`,
-            [req.username, from, to, category ?? null]
+            ORDER BY o.occurrence_date DESC, e.id DESC
+            LIMIT $5::int`,
+            [req.username, from, to, category ?? null, limit ?? null]
         )
         res.json(rows)
     } catch (err) {

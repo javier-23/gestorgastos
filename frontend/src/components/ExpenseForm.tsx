@@ -1,19 +1,21 @@
 import { useState } from 'react'
-import type { Categoria } from '../types'
+import type { Categoria, Gasto } from '../types'
 import { fetchApi } from '../api'
 
 interface ExpenseFormProps {
   categorias: Categoria[]
-  onCreated: () => void
+  gasto?: Gasto | null
+  onSaved: () => void
+  onCancel?: () => void
 }
 
-export function ExpenseForm({categorias, onCreated }: ExpenseFormProps) {
-  const [date, setDate] = useState('')
-  const [total, setTotal] = useState('')
-  const [concept, setConcept] = useState('')
-  const [categoryId, setCategoryId] = useState('')
-  const [frequency, setFrequency] = useState('once')
-  const [endDate, setEndDate] = useState('')
+export function ExpenseForm({categorias, gasto, onSaved, onCancel }: ExpenseFormProps) {
+  const [date, setDate] = useState(gasto?.date ?? '')
+  const [total, setTotal] = useState(gasto?.total ?? '')
+  const [concept, setConcept] = useState(gasto?.concept ?? '')
+  const [categoryId, setCategoryId] = useState(gasto ? String(gasto.category_id) : '')
+  const [frequency, setFrequency] = useState(gasto?.frequency ?? 'once')
+  const [endDate, setEndDate] = useState(gasto?.end_date ?? '')
   const [error, setError] = useState('')
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
@@ -21,8 +23,8 @@ export function ExpenseForm({categorias, onCreated }: ExpenseFormProps) {
     setError('')
 
     try {
-        await fetchApi('/expenses', {
-            method: 'POST',
+        await fetchApi(gasto ? `/expenses/${gasto.id}` : '/expenses', {
+            method: gasto ? 'PUT' : 'POST',
             body: JSON.stringify({
                 date,
                 total: Number(total),
@@ -32,21 +34,20 @@ export function ExpenseForm({categorias, onCreated }: ExpenseFormProps) {
                 end_date: frequency === 'once' ? null : endDate || null
             })
         })
-        onCreated()
+        setTotal('')
+        setConcept('')
+        onSaved()
     } catch (err) {
         setError(err instanceof Error ? err.message : 'Error')
     }
-
-    setTotal('')
-    setConcept('')
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Nuevo gasto</h2>
+      <h2>{gasto ? 'Editar gasto' : 'Nuevo gasto'}</h2>
 
       <input type="date" value={date} onChange={e => setDate(e.target.value)} required />
-      <input type="number" step="0.50" placeholder="Importe" value={total} onChange={e => setTotal(e.target.value)} required />
+      <input type="number" step="0.01" placeholder="Importe" value={total} onChange={e => setTotal(e.target.value)} required />
       <input placeholder="Concepto" value={concept} onChange={e => setConcept(e.target.value)} />
 
       <select value={categoryId} onChange={e => setCategoryId(e.target.value)} required>
@@ -56,7 +57,7 @@ export function ExpenseForm({categorias, onCreated }: ExpenseFormProps) {
         )}
       </select>
 
-      <select value={frequency} onChange={e => setFrequency(e.target.value)}>
+      <select value={frequency} onChange={e => setFrequency(e.target.value as typeof frequency)}>
         <option value="once">Puntual</option>
         <option value="weekly">Semanal</option>
         <option value="monthly">Mensual</option>
@@ -67,7 +68,8 @@ export function ExpenseForm({categorias, onCreated }: ExpenseFormProps) {
         <input placeholder="Fecha fin" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
       )}
 
-      <button type="submit">Añadir</button>
+      <button type="submit">{gasto ? 'Guardar cambios' : 'Añadir'}</button>
+      {gasto && onCancel && <button type="button" onClick={onCancel}>Cancelar</button>}
       {error && <p>{error}</p>}
     </form>
   )

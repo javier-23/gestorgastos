@@ -50,7 +50,7 @@ router.put('/:id', async (req, res) => {
   if (!parsedId.success) {
     return res.status(400).json({ error: 'id inválido' })
   }
-  const { id } = parsedId.data
+  const id = parsedId.data
 
   // Validar body
   const parsedBody = categorySchema.safeParse(req.body)
@@ -84,7 +84,7 @@ router.delete('/:id', async (req, res) => {
   if (!parsedId.success) {
     return res.status(400).json({ error: 'id inválido' })
   }
-  const { id } = parsedId.data
+  const id = parsedId.data
 
     try {
         const { rowCount } = await pool.query(
@@ -94,7 +94,7 @@ router.delete('/:id', async (req, res) => {
         if (rowCount === 0) {
             return res.status(404).json({ error: 'Categoría no encontrada' })
         }
-        res.json({ message: 'Categoría eliminada' })
+        res.status(204).end()
     } catch (err) {
       if (err.code === '23503') {
         return res.status(409).json({ error: 'La categoría tiene gastos asociados' })

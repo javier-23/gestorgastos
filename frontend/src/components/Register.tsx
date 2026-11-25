@@ -1,24 +1,27 @@
 import { useState } from 'react'
 import { fetchApi } from '../api'
+import { Link } from 'react-router'
 
-export function Register() {
+interface RegisterProps {
+  onRegistered: () => void
+}
+
+export function Register({ onRegistered }: RegisterProps) {
   const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
 
     async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
         e.preventDefault()
         setError('')
-        setSuccess(false)
 
         try{
             await fetchApi('/auth/register', {
-            method: 'POST',
-            body: JSON.stringify({ username, name, password })
+                method: 'POST',
+                body: JSON.stringify({ username, name, password })
             })
-            setSuccess(true)
+            onRegistered()
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Error')
             return
@@ -26,16 +29,35 @@ export function Register() {
     }
 
   return (
-    <>
-      <h1>Registro</h1>
-        <form onSubmit={handleSubmit}>
-            <input placeholder="Nombre de usuario o correo electrónico" value={username} onChange={e => setUsername(e.target.value)} />
-            <input placeholder="Nombre" value={name} onChange={e => setName(e.target.value)} />
-            <input type="password" placeholder="Contraseña" value={password} onChange={e => setPassword(e.target.value)} />
-            <button type="submit">Crear cuenta</button>
-            {success && <p>¡Registro exitoso!</p>}
-            {error && <p>{error}</p>}
-        </form>
-    </>
+    <form onSubmit={handleSubmit}>
+        <h1>Registro</h1>
+        <input
+            placeholder="Nombre de usuario" 
+            value={username} 
+            onChange={e => setUsername(e.target.value)} 
+            required
+            minLength={3}
+            maxLength={30}
+        />
+        <input 
+            placeholder="Nombre" 
+            value={name} 
+            onChange={e => setName(e.target.value)}
+            required
+            maxLength={50} 
+        />
+        <input 
+            type="password" 
+            placeholder="Contraseña" 
+            value={password} 
+            onChange={e => setPassword(e.target.value)} 
+            required
+            minLength={8}
+            maxLength={72}
+        />
+        <button type="submit">Crear cuenta</button>
+        <p>¿Ya tienes cuenta? <Link to="/login">Iniciar sesión</Link></p>
+        {error && <p>{error}</p>}
+    </form>
 )
 } 

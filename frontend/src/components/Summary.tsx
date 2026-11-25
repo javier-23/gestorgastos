@@ -25,7 +25,7 @@ export function Summary({ recarga }: SummaryProps) {
   const [resumen, setResumen] = useState<Resumen | null>(null)
   const [error, setError] = useState('')
   const [guardado, setGuardado] = useState(0) // Para forzar la recarga del resumen cuando se guarda un presupuesto
-  const { historial, error: errorHistorial } = useHistorial(mes, recarga + guardado)
+  const { historial, errorHistorial } = useHistorial(mes, recarga + guardado)
 
   const mesAnterior = cambiarMes(mes, -1)
 

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import {fetchApi} from '../api'
+import { Link } from 'react-router'
 
 interface LoginFormProps {
   onLogin: (token: string, name: string) => void // Función con un parámetro de tipo string y sin valor de retorno
@@ -33,6 +34,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
       <input type="password" placeholder="Contraseña" value={password} onChange={e => setPassword(e.target.value)} />
       <button type="submit">Entrar</button>
       {error && <p>{error}</p>}
+      <p>¿No tienes cuenta? <Link to="/register">Crear cuenta</Link></p>
     </form>
   )
 }

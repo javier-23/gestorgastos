@@ -12,7 +12,7 @@ function nombreMesCorto(mes: string) {
 
 export function useHistorial(mes: string, refrescar: number) {
   const [historial, setHistorial] = useState<PuntoHistorial[]>([])
-  const [error, setError] = useState('')
+  const [errorHistorial, setErrorHistorial] = useState('')
 
   useEffect(() => {
     const meses = [-5, -4, -3, -2, -1, 0].map(d => cambiarMes(mes, d))
@@ -20,7 +20,7 @@ export function useHistorial(mes: string, refrescar: number) {
     // Obtener los resúmenes de los últimos 6 meses a la vez
     Promise.all(meses.map(m => fetchApi(`/summary?month=${m}`)))
       .then((resumenes: Resumen[]) => {
-        setError('')
+        setErrorHistorial('')
         setHistorial(resumenes.map((r, i) => ({ // r es el resumen de cada mes, i es el índice del mes
           mes: nombreMesCorto(meses[i]),
           ingresos: r.budget ?? 0,
@@ -28,8 +28,8 @@ export function useHistorial(mes: string, refrescar: number) {
           ahorro: r.remaining
         })))
       })
-      .catch(err => setError(err.message))
+      .catch(err => setErrorHistorial(err.message))
   }, [mes, refrescar])
 
-  return { historial, error }
+  return { historial, errorHistorial }
 }

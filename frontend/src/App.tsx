@@ -1,7 +1,10 @@
 import { useState} from 'react'
 import { LoginForm } from './components/LoginForm'
-import { Dashboard } from './components/Dashboard'
+import { DashboardPage } from './pages/DashboardPage'
+import { CategoriesPage } from './pages/CategoriesPage'
+import { ExpensesPage } from './pages/ExpensesPage'
 import { Register } from './components/Register'
+import { Layout } from './components/Layout'
 import { Routes, Route, Navigate, useNavigate } from 'react-router'
 
 function App() {
@@ -33,10 +36,12 @@ function App() {
         path="/register"
         element={token ? <Navigate to="/" replace /> : <Register onRegistered={() => navigate('/login')} />}
       />
-      <Route
-        path="/"
-        element={token ? <Dashboard token={token} name={name} onLogout={handleLogout} /> : <Navigate to="/login" replace />}
-      />
+      <Route element={token ? <Layout onLogout={handleLogout} /> : <Navigate to="/login" replace />}>
+        <Route path="/" element={<DashboardPage name={name}/>} />
+        <Route path="/expenses" element={<ExpensesPage />} />
+        <Route path="/categories" element={<CategoriesPage />} />
+      </Route>
+
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

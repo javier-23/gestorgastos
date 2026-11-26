@@ -1,5 +1,5 @@
 // Componente para mostrar cuanto ha cambiado un valor, y si es positivo y negativo
-export function Comparasion({ diff, mes, subirEsBueno }: { diff: number, mes: string, subirEsBueno: boolean }) {
+export function Comparation({ diff, mes, subirEsBueno }: { diff: number, mes: string, subirEsBueno: boolean }) {
 
     const verde = '#377939'
     const rojo = '#942f27'
